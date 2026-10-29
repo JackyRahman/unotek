@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: unotek-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgrespassword
+      POSTGRES_DB: unotek_company_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations/000001_create_rbac_and_users.up.sql:/docker-entrypoint-initdb.d/01_rbac.sql
+      - ./migrations/000002_create_masters_and_content.up.sql:/docker-entrypoint-initdb.d/02_masters.sql
+      - ./migrations/000003_seed_initial_data.up.sql:/docker-entrypoint-initdb.d/03_seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: unotek-api
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_NAME: unotek-backend
+      APP_ENV: production
+      APP_PORT: 8080
+      APP_DEBUG: "false"
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgrespassword
+      DB_NAME: unotek_company_db
+      DB_SSLMODE: disable
+      JWT_SECRET: super-production-secret-key-min-32-chars-long!
+      ENABLE_AUTO_MIGRATION: "true"
+      ENABLE_AUTO_SEEDER: "true"
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
