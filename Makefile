@@ -32,6 +32,22 @@ docker-down:
 docker-clean:
 	docker compose down -v
 
+# Run database schema migrations
+migrate-up:
+	go run ./cmd/migrate/main.go up
+
+# Run database seeder (initial super admin & master data)
+migrate-seed:
+	go run ./cmd/migrate/main.go seed
+
+# Run both migration and seeding
+migrate-all:
+	go run ./cmd/migrate/main.go all
+
+# Drop all tables (reset database)
+migrate-drop:
+	go run ./cmd/migrate/main.go drop
+
 # Clean build artifacts
 clean:
 	rm -rf bin/

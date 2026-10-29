@@ -42,7 +42,7 @@ Backend API untuk website profil perusahaan software house (**Unotek Digital Sol
 
 ## 🛠️ Panduan Menyiapkan Git Repository
 
-Jalankan perintah berikut di dalam folder `unotek/` untuk menginisialisasi repo dan push ke GitHub:
+Jalankan perintah berikut di direktori root project untuk menginisialisasi repo dan push ke GitHub:
 
 ```bash
 # Inisialisasi git repository
@@ -81,13 +81,17 @@ APP_DEBUG=true
 APP_URL=http://localhost:8080
 
 # Database Configuration (PostgreSQL)
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=postgres
-DB_PASSWORD=postgres
-DB_NAME=unotek_company_db
-DB_SSLMODE=disable
-DB_TIMEZONE=Asia/Jakarta
+# Format 1 Baris Connection URL (Recommended):
+DATABASE_URL=postgres://postgres:admin12345@100.119.247.22:5432/itsm_dev?sslmode=disable
+
+# Atau Format Parameter Terpisah (Fallback):
+# DB_HOST=localhost
+# DB_PORT=5432
+# DB_USER=postgres
+# DB_PASSWORD=postgres
+# DB_NAME=unotek_company_db
+# DB_SSLMODE=disable
+# DB_TIMEZONE=Asia/Jakarta
 
 # JWT Security
 JWT_SECRET=super-secret-key-change-this-in-production-min-32-chars-long!
@@ -98,30 +102,38 @@ JWT_REFRESH_EXPIRATION_DAYS=7
 RATE_LIMIT_RPS=20
 RATE_LIMIT_BURST=40
 
-# Initial Seeder & Auto Migration
-ENABLE_AUTO_MIGRATION=true
-ENABLE_AUTO_SEEDER=true
 ```
 
 ---
 
-## 🏃 Cara Menjalankan Aplikasi
+## 💾 Perintah Database Migration & Seeder
 
-### Opsi 1: Menjalankan Langsung via Go CLI
+Migration dan seeder dipisahkan dari server runtime agar server dapat langsung menyala secara instan tanpa query overhead:
 
-1. Pastikan PostgreSQL sudah berjalan dan database `unotek_company_db` sudah dibuat:
-   ```bash
-   createdb -U postgres unotek_company_db
-   ```
-2. Unduh dependencies:
-   ```bash
-   go mod tidy
-   ```
-3. Jalankan server:
-   ```bash
-   go run ./cmd/api/main.go
-   ```
-   *Saat pertama kali dijalankan dengan `ENABLE_AUTO_MIGRATION=true` dan `ENABLE_AUTO_SEEDER=true`, sistem akan otomatis membuat seluruh tabel dan mengisi data awal (termasuk super admin).*
+```bash
+# 1. Jalankan migrasi tabel saja
+go run ./cmd/migrate/main.go up
+
+# 2. Jalankan seeder master data & Super Admin
+go run ./cmd/migrate/main.go seed
+
+# 3. Jalankan migrasi sekaligus seeder
+go run ./cmd/migrate/main.go all
+
+# 4. Rollback / drop semua tabel (reset)
+go run ./cmd/migrate/main.go drop
+```
+
+---
+
+## 🏃 Cara Menjalankan Server API
+
+Server API sekarang murni menjalankan HTTP engine tanpa overhead migration:
+
+```bash
+# Jalankan server API (instan dalam milidetik)
+go run ./cmd/api/main.go
+```
 
 ---
 

@@ -8,11 +8,11 @@ if (-not (Test-Path ".git")) {
 }
 
 Write-Host "Staging all project files..." -ForegroundColor Cyan
-git add .
+git add -A
 
-Write-Host "Creating initial commit..." -ForegroundColor Cyan
+Write-Host "Creating commit..." -ForegroundColor Cyan
 git commit -m @"
-feat: initial commit enterprise clean architecture backend with rbac, migrations, seeders, and swagger
+feat: restructure backend to repo root, include svg designs, and full clean architecture
 
 Co-Authored-By: Claude Code <noreply@anthropic.com>
 "@

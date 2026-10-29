@@ -12,11 +12,11 @@ if not exist .git (
     git remote add origin https://github.com/JackyRahman/unotek.git
 )
 
-echo Adding files...
-git add .
+echo Staging all files...
+git add -A
 
 echo Committing files...
-git commit -m "feat: initial commit enterprise clean architecture backend with rbac, migrations, seeders, and swagger" -m "Co-Authored-By: Claude Code <noreply@anthropic.com>"
+git commit -m "feat: restructure backend to repo root, include svg designs, and full clean architecture" -m "Co-Authored-By: Claude Code <noreply@anthropic.com>"
 
 echo Pushing to origin main...
 git push -u origin main

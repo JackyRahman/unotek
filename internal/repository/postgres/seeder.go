@@ -12,6 +12,14 @@ import (
 
 func SeedInitialData(db *gorm.DB) error {
 	ctx := context.Background()
+
+	// Fast-check: Jika data admin sudah ada di database, lewati proses seeding agar startup instan
+	var adminCount int64
+	if err := db.WithContext(ctx).Model(&domain.User{}).Where("email = ?", "admin@company.com").Count(&adminCount).Error; err == nil && adminCount > 0 {
+		log.Println("[SEEDER] Database sudah ter-seed sebelumnya. Melewati seeding untuk startup cepat.")
+		return nil
+	}
+
 	log.Println("[SEEDER] Checking and seeding initial master data...")
 
 	// 1. Roles

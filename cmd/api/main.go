@@ -42,20 +42,13 @@ func main() {
 	cfg := config.LoadConfig()
 	log.Printf("[APP] Starting %s in %s mode...\n", cfg.App.Name, cfg.App.Env)
 
-	// 2. Initialize Database Connection
+	// 2. Initialize Database Connection (Fast pool, no migration/seeder overhead)
 	db, err := database.NewPostgresDB(cfg)
 	if err != nil {
 		log.Fatalf("[DATABASE] Connection error: %v\n", err)
 	}
 
-	// 3. Run Automatic Initial Seeder if enabled
-	if cfg.App.EnableAutoSeeder {
-		if err := postgres.SeedInitialData(db); err != nil {
-			log.Printf("[SEEDER] Warning during seeding: %v\n", err)
-		}
-	}
-
-	// 4. Initialize Core Security Services
+	// 3. Initialize Core Security Services
 	jwtService := security.NewJWTService(cfg.JWT.Secret, cfg.JWT.ExpirationHours)
 
 	// 5. Initialize Repositories (PostgreSQL)

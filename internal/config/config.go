@@ -17,16 +17,15 @@ type Config struct {
 }
 
 type AppConfig struct {
-	Name               string
-	Env                string
-	Port               string
-	Debug              bool
-	URL                string
-	EnableAutoMigrate  bool
-	EnableAutoSeeder   bool
+	Name  string
+	Env   string
+	Port  string
+	Debug bool
+	URL   string
 }
 
 type DatabaseConfig struct {
+	URL             string
 	Host            string
 	Port            string
 	User            string
@@ -58,15 +57,14 @@ func LoadConfig() *Config {
 
 	return &Config{
 		App: AppConfig{
-			Name:              getEnv("APP_NAME", "unotek-backend"),
-			Env:               getEnv("APP_ENV", "development"),
-			Port:              getEnv("APP_PORT", "8080"),
-			Debug:             getEnvAsBool("APP_DEBUG", true),
-			URL:               getEnv("APP_URL", "http://localhost:8080"),
-			EnableAutoMigrate: getEnvAsBool("ENABLE_AUTO_MIGRATION", true),
-			EnableAutoSeeder:  getEnvAsBool("ENABLE_AUTO_SEEDER", true),
+			Name:  getEnv("APP_NAME", "unotek-backend"),
+			Env:   getEnv("APP_ENV", "development"),
+			Port:  getEnv("APP_PORT", "8080"),
+			Debug: getEnvAsBool("APP_DEBUG", true),
+			URL:   getEnv("APP_URL", "http://localhost:8080"),
 		},
 		Database: DatabaseConfig{
+			URL:             getEnv("DATABASE_URL", getEnv("DB_URL", "")),
 			Host:            getEnv("DB_HOST", "localhost"),
 			Port:            getEnv("DB_PORT", "5432"),
 			User:            getEnv("DB_USER", "postgres"),
