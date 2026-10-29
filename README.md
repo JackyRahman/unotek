@@ -82,7 +82,7 @@ APP_URL=http://localhost:8080
 
 # Database Configuration (PostgreSQL)
 # Format 1 Baris Connection URL (Recommended):
-DATABASE_URL=postgres://postgres:admin12345@100.119.247.22:5432/itsm_dev?sslmode=disable
+DATABASE_URL=postgres://postgres:admin12345@100.xxx.247.22:5432/itsm_dev?sslmode=disable
 
 # Atau Format Parameter Terpisah (Fallback):
 # DB_HOST=localhost
