@@ -1,6 +1,6 @@
 # Unotek Enterprise Backend
 
-Backend API untuk website profil perusahaan software house (**Unotek Digital Solusindo**) yang dibangun menggunakan **Go (Golang)** dengan **Clean Architecture**, **PostgreSQL**, **Role-Based Access Control (RBAC)**, **Swagger OpenAPI**, dan standar keamanan enterprise (*zero known vulnerabilities*).
+Backend API untuk website profil perusahaan software house (**Unotek**) yang dibangun menggunakan **Go (Golang)** dengan **Clean Architecture**, **PostgreSQL**, **Role-Based Access Control (RBAC)**, **Swagger OpenAPI**, dan standar keamanan enterprise (*zero known vulnerabilities*).
 
 ---
 
